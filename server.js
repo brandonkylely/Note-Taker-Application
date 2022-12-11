@@ -1,10 +1,11 @@
-// import express 
+// imports
 const express = require('express');
 const path = require('path')
 const route = 3001;
 const fs = require ('fs')
 const db = require('./db/db.json');
-
+const uuid = require('./helpers/uuid.js');
+const { application } = require('express');
 // initialize app variable 
 const app = express();
 
@@ -21,24 +22,47 @@ app.get('/notes', (req, res) => {
 
 app.get('/api/notes', (req, res) =>{
     res.json(db);
-    res.json(`${req.method} request received`);
+    // res.json(`${req.method} request received`);
     console.info(`${req.method} request received`);
 })
 
-app.post('/api/notes', (req,res) => {
+app.post('/api/notes', (req, res) => {
     console.info(`${req.method} request received`);
     
     const {title, text} = req.body;
     console.log(req.body)
-    if  (title && text) {
-        
-        const newNote = {title, text};
-        
-        const noteString = JSON.stringify(newNote);
-        
-        fs.appendfile('./db/db.json', noteString);
-    }
+
+    const newNote = {title, text, id:uuid()};
+    
+    db.push(newNote)
+
+    const noteString = JSON.stringify(db);
+    
+    fs.writeFileSync('./db/db.json', noteString);
+
+    res.json(db)
 })
+
+app.delete(`/api/notes/:id`, (req, res) => {
+    const id = req.params.id;
+    const index = db.findIndex(note => {
+        return note.id === id;
+    });
+    // for(let i=0; i<db.length; i++){
+    //     if (note.id === id){
+    //         db.splice(i, 1)
+    //     }
+    // }
+    console.log(index)
+
+    console.log(db)
+    const noteString = JSON.stringify(db)
+
+    fs.writeFileSync('./db/db.json', noteString)
+
+    res.json(db)
+}
+)
 
 // open server with route
 app.listen(route, console.log(`http://localhost:${route}`));
