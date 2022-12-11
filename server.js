@@ -2,6 +2,7 @@
 const express = require('express');
 const path = require('path')
 const route = 3001;
+const fs = require ('fs')
 const db = require('./db/db.json');
 
 // initialize app variable 
@@ -20,12 +21,23 @@ app.get('/notes', (req, res) => {
 
 app.get('/api/notes', (req, res) =>{
     res.json(db);
-})
-
-app.post('/notes', (req,res) => {
     res.json(`${req.method} request received`);
     console.info(`${req.method} request received`);
+})
 
+app.post('/api/notes', (req,res) => {
+    console.info(`${req.method} request received`);
+    
+    const {title, text} = req.body;
+    console.log(req.body)
+    if  (title && text) {
+        
+        const newNote = {title, text};
+        
+        const noteString = JSON.stringify(newNote);
+        
+        fs.appendfile('./db/db.json', noteString);
+    }
 })
 
 // open server with route
