@@ -67,4 +67,4 @@ app.delete(`/api/notes/:id`, (req, res) => {
 )
 
 // open server with route
-app.listen(route, console.log(`http://localhost:${PORT}`));
+app.listen(PORT, console.log(`http://localhost:${PORT}`));
