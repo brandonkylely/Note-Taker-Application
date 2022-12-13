@@ -1,7 +1,7 @@
 // imports
 const express = require('express');
 const path = require('path')
-const route = 3001;
+const route = process.env.PORT || 3001;
 const fs = require ('fs')
 const db = require('./db/db.json');
 const uuid = require('./helpers/uuid.js');
@@ -48,11 +48,13 @@ app.delete(`/api/notes/:id`, (req, res) => {
     const index = db.findIndex(note => {
         return note.id === id;
     });
+    // alternatively,
     // for(let i=0; i<db.length; i++){
     //     if (note.id === id){
     //         db.splice(i, 1)
     //     }
     // }
+    db.splice(index, 1)
     console.log(index)
 
     console.log(db)
