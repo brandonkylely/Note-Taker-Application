@@ -1,7 +1,7 @@
 // imports
 const express = require('express');
 const path = require('path')
-const route = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3001;
 const fs = require ('fs')
 const db = require('./db/db.json');
 const uuid = require('./helpers/uuid.js');
@@ -67,4 +67,4 @@ app.delete(`/api/notes/:id`, (req, res) => {
 )
 
 // open server with route
-app.listen(route, console.log(`http://localhost:${route}`));
+app.listen(route, console.log(`http://localhost:${PORT}`));
